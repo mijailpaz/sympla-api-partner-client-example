@@ -23,10 +23,12 @@ st.markdown(
         margin-bottom: 5px;
     }
     </style>
-    """, unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True
+)
 
 # Título e introdução
-st.title("Eventos da Sympla")
+st.title("Sympla-api-partner-client-example")
 st.write("Bem-vindo ao aplicativo para explorar eventos da API de Parceiros da Sympla!")
 
 # Introdução à API
@@ -47,11 +49,10 @@ with st.sidebar:
     token = st.text_input("Token de Acesso", type="password")
     page = st.number_input("Página", min_value=1, value=1, step=1)
     limit = st.number_input("Quantidade de eventos por página", min_value=1, value=16, step=1)
-    if token:
-        st.success("Token definido!")
+    fetch_data = st.button("Carregar Eventos")
 
-# Se o token foi informado, prossegue para chamar a API
-if token:
+# Se o botão for clicado e o token for informado
+if fetch_data and token:
     headers = {
         "Accept": "application/json",
         "s_token": token
@@ -121,7 +122,7 @@ if token:
                     <p><strong>Tipo:</strong> {event_type}</p>
                     {"<p><strong>Desconto:</strong> " + discount + "</p>" if discount else ""}
                     <p><strong>Local:</strong> {address} - {city}/{state}, {country}</p>
-                    <p><a href="{url}" target="_blank">Mais informações</a></p>
+                    <p><a href="{url}" target="_blank">Link evento</a></p>
                 </div>
                 """
                 # Escreve o card na coluna atual
@@ -135,4 +136,5 @@ if token:
         else:
             st.warning("Nenhum evento encontrado.")
 else:
-    st.info("Por favor, insira seu token na barra lateral para visualizar os eventos.")
+    if not token:
+        st.info("Por favor, insira seu token na barra lateral para carregar os eventos.")

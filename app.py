@@ -74,10 +74,17 @@ if fetch_data and token:
             result = {}
 
         # Extrai a lista de eventos e os parâmetros de paginação
-        events = result.get("data", [])
-        total = result.get("total", 0)
-        current_page = result.get("page", page)
-        current_limit = result.get("limit", limit)
+        # Handle both list and dictionary responses
+        if isinstance(result, list):
+            events = result
+            total = len(result)
+            current_page = page
+            current_limit = limit
+        else:
+            events = result.get("data", [])
+            total = result.get("total", 0)
+            current_page = result.get("page", page)
+            current_limit = result.get("limit", limit)
         
         if events:
             st.write(f"Foram encontrados {total} eventos (mostrando {len(events)} na página {current_page}).")
